@@ -13,4 +13,4 @@
 모든 HTML 마크업을 대신하지 못한다.
 
 
-관련 자료 : <a:href="https://heropy.blog/2017/09/30/markdown/">블로그<a/>
+관련 자료 : https://heropy.blog/2017/09/30/markdown/
