@@ -11,11 +11,21 @@ sayHello();
 
 괄호 안의 이름으로 변수를 생성함.
 ```
-function sayHello(nameOfPerson) {
+function sayHello(nameOfPerson, age) {
     console.log(nameOfPerson);
 }
 
-sayHello("nico");
-sayHello("dal");
-sayHello("lynn");
+sayHello("nico",3);
+sayHello("dal"),2;
+sayHello("lynn",1);
+```
+object를 이용한 function
+```
+const player1 = {
+    name: "nico",
+    sayHello: function(otherPersonsName){
+        console.log("hello" + otherPersonsName);
+    }
+};
+player1.sayHello("lynn");
 ```
