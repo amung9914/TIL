@@ -19,6 +19,13 @@ sayHello("nico",3);
 sayHello("dal"),2;
 sayHello("lynn",1);
 ```
+리턴값이 있는 경우
+```
+function calculateKrAge(ageOfForeigner){
+    return ageOfForeigner + 2;
+}
+```
+
 object를 이용한 function
 ```
 const player1 = {
