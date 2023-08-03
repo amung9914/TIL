@@ -52,3 +52,4 @@ function paintToDo(newTodo){
     toDoList.appendChild(li); // append는 나중에 이뤄줘야함.
 }
 ```
+Date.now() : 랜덤값 사용할 때 이용함. 이것을 이용해서 목록(li)에 id값줄 수 있음.
