@@ -60,7 +60,7 @@ String str = 1 + "2" + 3; -> String str "12"+3; -> String str = "123";
 (byte,short,char,int,long,float,double,boolean)  
 `String.valueOf(기본타입값)`
 
-문자열을 기본 타입으로 강제타입변환
+#### 문자열을 기본 타입으로 강제타입변환
 
 String -> int
 
