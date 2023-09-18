@@ -72,3 +72,22 @@ public void clearStore(){
     store.clear();
 }
 ```
+
+<hr/>
+### @Transactional
+
+DB를 이용해서 테스트 후 넣은 데이터를 rollback해서 지워줌.(testcase에 붙었을 때만 이렇게 동작함.)
+
+```
+
+@SpringBootTest
+@Transactional
+class MemberServiceIntegrationTest {
+```
+
+이렇게 하면 DB의 실제 데이터에 반영이 안됨.
+
+@SpringBootTest : 스프링 컨테이너와 테스트를 함께 실행한다.  
+@Transactional : 테스트 케이스에 이 애노테이션이 있으면, 테스트 시작 전에 트랜잭션을 시작하고,   
+테스트 완료 후에 항상 롤백한다. 이렇게 하면 DB에 데이터가 남지 않으므로 다음 테스트에 영향을 주지  
+않는다.
