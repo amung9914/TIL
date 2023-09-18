@@ -74,7 +74,10 @@ public void clearStore(){
 ```
 
 <hr/>
-### @Transactional
+
+### 통합 테스트
+
+@Transactional
 
 DB를 이용해서 테스트 후 넣은 데이터를 rollback해서 지워줌.(testcase에 붙었을 때만 이렇게 동작함.)
 
