@@ -62,6 +62,23 @@ SpEL 표현식에 만족하는 경우 동작한다.
 resources/META-INF/spring/  
 org.springframework.boot.autoconfigure.AutoConfiguration.imports
 
-예제)
 
-memory.MemoryAutoConfig
+### 참고
+다양한 외부 환경 설정을 Environment 하나로 읽어들일 수 있다.
+```
+#VM Options
+#java -Dmemory=on -jar project.jar
+-Dmemory=on
+
+#Program arguments
+# -- 가 있으면 스프링이 환경 정보로 사용
+#java -jar project.jar --memory=on
+--memory=on
+
+#application.properties
+#application.properties에 있으면 환경 정보로 사용
+memory=on
+```
+
+
+
