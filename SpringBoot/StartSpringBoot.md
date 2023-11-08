@@ -45,8 +45,9 @@ spring-boot-starter-batch : 스프링 배치를 위한 스타터
 https://docs.spring.io/spring-boot/docs/current/reference/html/using.html#using.buildsystems.starters
 
 외부 라이브러리의 버전을 변경하고 싶을 때 다음과 같은 형식으로 편리하게 변경할 수 있다.
-ext['tomcat.version'] = '10.1.4'
-> 스프링 부트가 관리하는 외부 라이브러리 버전 변경에 필요한 속성 값
-> https://docs.spring.io/spring-boot/docs/current/reference/html/dependencyversions.html#appendix.dependency-versions.properties
+``ext ['tomcat.version'] = '10.1.4' ``
+스프링 부트가 관리하는 외부 라이브러리 버전 변경에 필요한 속성 값
+
+https://docs.spring.io/spring-boot/docs/current/reference/html/dependencyversions.html#appendix.dependency-versions.properties
 스프링 부트가 관리하는 외부 라이브러리의 버전을 변경하는 일은 거의 없다. 하지만 아주 가끔 문제가
 발생하기도 하므로 알아두자
