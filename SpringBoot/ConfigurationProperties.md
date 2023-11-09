@@ -97,3 +97,25 @@ public class MyDataSourcePropertiesV2 {
 @Min(1) @Max(999) maxConnection : 최소 1 , 최대 999 의 값을 허용한다.
 
 @DurationMin(seconds = 1) @DurationMax(seconds = 60) : 최소 1, 최대 60초를 허용한다.
+
+<hr/>
+실행 클래스는 아래와 같이 작성하였다
+```
+package hello;
+
+import hello.config.MyDataSourceConfigV3;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.annotation.Import;
+
+@Import(MyDataSourceConfigV3.class)
+@SpringBootApplication(scanBasePackages="hello.datasource")
+public class ExternalReadApplication {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ExternalReadApplication.class, args);
+    }
+
+}
+
+```
