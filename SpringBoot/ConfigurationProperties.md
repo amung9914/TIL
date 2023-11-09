@@ -77,3 +77,14 @@ public class MyDataSourcePropertiesV2 {
 스프링 부트 3.0 부터는 생성자가 하나일 때는 생략할 수 있다.
 
 생성자가 둘 이상인 경우에는 사용할 생성자에 @ConstructorBinding 애노테이션을 적용하면 된다
+
+## 자바 빈 검증기(java bean validation)
+외부설정 사용 - @ConfigurationProperties 검증
+
+외부설정을 검증해서 사용할 수 있다(값이 정해진 범위에 있는지, 값이 존재하는지 조건 넣어서 확인 가능)
+
+@NotEmpty url , username , password 는 항상 값이 있어야 한다. 필수 값이 된다.
+
+@Min(1) @Max(999) maxConnection : 최소 1 , 최대 999 의 값을 허용한다.
+
+@DurationMin(seconds = 1) @DurationMax(seconds = 60) : 최소 1, 최대 60초를 허용한다.
