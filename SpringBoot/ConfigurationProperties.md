@@ -1,4 +1,6 @@
-## 외부설정 사용 @ConfigurationProperties
+# 외부설정 사용 @ConfigurationProperties, 자바 빈 검증기 @Validated, @Profile(프로필에따른 스프링 빈 등록)
+
+## 외부설정 사용 @ConfigurationProperties,
 
 외부설정을 사용하는 클래스에 @Data 대신
 
@@ -78,7 +80,7 @@ public class MyDataSourcePropertiesV2 {
 
 생성자가 둘 이상인 경우에는 사용할 생성자에 @ConstructorBinding 애노테이션을 적용하면 된다
 
-## 자바 빈 검증기(java bean validation)
+## 자바 빈 검증기(java bean validation) @Validated
 외부설정 사용 - @ConfigurationProperties 검증
 
 외부설정을 검증해서 사용할 수 있다(값이 정해진 범위에 있는지, 값이 존재하는지 조건 넣어서 확인 가능)
@@ -100,6 +102,7 @@ public class MyDataSourcePropertiesV2 {
 
 <hr/>
 실행 클래스는 아래와 같이 작성하였다
+
 ```
 package hello;
 
@@ -115,7 +118,61 @@ public class ExternalReadApplication {
     public static void main(String[] args) {
         SpringApplication.run(ExternalReadApplication.class, args);
     }
+```
 
+## @Profile(각 환경별로 등록할 스프링 빈 분리)
+@Profile 을 사용하면 각 환경 별로 외부 설정 값을 분리하는 것을 넘어서, 등록되는 스프링 빈도 분리할 수 있다
+
+#### 만약에 프로필에 따라 빈 등록이 변경되어야 한다면?
+
+예를 들어서  기능을 붙여야 하는데, 로컬 개발 환경에서는 실제 결제가 발생하면 문제가 되니 가짜 결제 기능이 있는 스프링 빈을 등록하고, 운영 환경에서는 실제 결제 기능을 제공하는 스프링 빈을 등록한다고 가정해보자  
+  
+config 파일에서 @Profile 사용  
+  
+```
+
+@Slf4j
+@Configuration
+public class PayConfig {
+
+    @Bean
+    @Profile("default")
+    public LocalPayClient localPayClient(){
+        log.info("LocalPayClient 빈 등록");
+        return new LocalPayClient();
+    }
+
+    @Bean
+    @Profile("prod")
+    public ProdPayClient prodPayClient(){
+        log.info("ProdPayClient 빈 등록");
+        return new ProdPayClient();
+    }
 }
+```
 
+ApplicationRunner 인터페이스를 사용하면 스프링은 빈 초기화가 모두 끝나고 애플리케이션 로딩이 완료되는 시점에 run(args) 메서드를 호출해준다.
+
+(테스트시 사용되는 클래스 예시)
+
+```
+package hello.pay;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.boot.ApplicationArguments;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.stereotype.Component;
+
+@Component
+@RequiredArgsConstructor
+public class OrderRunner implements ApplicationRunner {
+
+    private final OrderService orderService;
+
+
+    @Override
+    public void run(ApplicationArguments args) throws Exception {
+        orderService.order(1000);
+    }
+}
 ```
