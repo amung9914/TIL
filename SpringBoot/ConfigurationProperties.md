@@ -83,6 +83,10 @@ public class MyDataSourcePropertiesV2 {
 
 외부설정을 검증해서 사용할 수 있다(값이 정해진 범위에 있는지, 값이 존재하는지 조건 넣어서 확인 가능)
 
+값이 검증에 통과하지 않으면 애플리케이션 로딩 시점에 확인할 수 있다.
+
+가장 좋은 예외는 컴파일 예외, 그리고 애플리케이션 로딩 시점에 발생하는 예외이다.
+
 1. build.gradle에 ``spring-boot-starter-validation``추가<br/> ``implementation 'org.springframework.boot:spring-boot-starter-validation'``
    
 3. ``@Validated``를 ``@ConfigurationProperties`` 와 함께 사용해서 작성한다.
