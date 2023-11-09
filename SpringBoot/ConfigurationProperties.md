@@ -83,6 +83,11 @@ public class MyDataSourcePropertiesV2 {
 
 외부설정을 검증해서 사용할 수 있다(값이 정해진 범위에 있는지, 값이 존재하는지 조건 넣어서 확인 가능)
 
+1. build.gradle에 ``spring-boot-starter-validation``추가<br/> ``implementation 'org.springframework.boot:spring-boot-starter-validation'``
+   
+3. ``@Validated``를 ``@ConfigurationProperties`` 와 함께 사용해서 작성한다.
+
+
 @NotEmpty url , username , password 는 항상 값이 있어야 한다. 필수 값이 된다.
 
 @Min(1) @Max(999) maxConnection : 최소 1 , 최대 999 의 값을 허용한다.
