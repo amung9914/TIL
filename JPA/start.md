@@ -16,12 +16,13 @@
     </properties>
 
     <dependencies>
-        <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core -->
-        <dependency>
-            <groupId>org.hibernate.orm</groupId>
-            <artifactId>hibernate-core</artifactId>
-            <version>6.2.6.Final</version>
-        </dependency>
+       <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-entitymanager -->
+         <dependency>
+             <groupId>org.hibernate</groupId>
+             <artifactId>hibernate-entitymanager</artifactId>
+             <version>5.6.15.Final</version>
+         </dependency>
+
         <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
         <dependency>
             <groupId>com.h2database</groupId>
