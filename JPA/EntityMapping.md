@@ -58,3 +58,169 @@ value는 EnumType.STRING 사용을 해주자!!!
 @GeneratedValue : 자동생성
 #### 권장하는 식별자 전략 : Long형 + 대체키 + 키 생성전략 사용
 - 기본 키 제약조건:null아님, 유일, 변하면 안된다.(자연키는 해당값 찾기 어렵다(주민등록번호도 적절x))
+
+## 상속관계 테이블 설계 전략
+
+#### 조인 전략을 기본으로
+​
+확장할 일도 없을거같고 데이터도 넘 단순하다 
+#### -> 싱글 테이블 전략
+​
+근데, 비즈니스적으로 중요하고 복잡하다 
+#### -> 조인 테이블 전략
+​
+<hr/>​
+@Inheritance(strategy=InheritanceType.JOINED : 조인전략
+​
+SINGLE\_TABLE : 단일 테이블 전략
+​
+@DiscriminatorColumn(name="DTYPE")
+​
+@DiscriminatorValue("XXX")
+​<hr/>
+
+단일 테이블 전략 단점 : 자식 엔티티가 매핑한 컬럼은 모두 null 허용
+
+## @MappedSuperclass
+
+id,name 등 공통 매핑 정보가 필요할 때 사용, 엔티티가 아님에 주의!
+
+단순히 엔티티가 공통으로 사용하는 매핑정보를 모으는 역할
+
+```
+@MappedSuperclass
+public abstract class BaseEntity {
+    private String createBy;
+    private LocalDateTime createdDate;
+    private String lastModifiedBy;
+    private LocalDateTime lastModifiedDate;
+```
+
+속성만 상속받을 때 쓰는 MappedSuperclass
+
+필드 예시는 운영 시 기본으로 깔려야하는 녀석들. 나중에 Spring Data 쓰면 4가지 다 어노테이션으로 쉽게 입력가능~~
+
+## 프록시
+
+지연로딩 LAZY를 사용해서 프록시로 조회. 우리는 얘가 엔티티인지 프록시인지 알 수 없다. 
+
+따라서 JPA에서는 ==비교 대신
+
+#### instance of 사용하기~(프록시객체랑 그냥 객체 == 비교하면 false나옴)
+
+(instanceOf 연산자는 객체가 어떤 클래스인지, 어떤 클래스를 상속받았는지 확인하는데 사용하는 연산자)
+
+![image](https://github.com/amung9914/TIL/assets/137124338/3e2325c9-a843-4d85-94e3-5db103af7e5b)
+
+
+```
+
+/* TRUE
+Member m1 = em.find(Member.class, member1.getId());
+Member m2 = em.find(Member.class, member2.getId());
+
+System.out.println("m1 == m2" + (m1.getClass() == m2.getClass()));
+ */
+
+
+Member m1 = em.find(Member.class, member1.getId());
+Member m2 = em.getReference(Member.class, member2.getId());
+//false
+System.out.println("m1 == m2" + (m1.getClass() == m2.getClass()));
+System.out.println("m1 == m2" + (m1 instanceof Member)); // true
+System.out.println("m1 == m2" + (m2 instanceof Member)); // true
+```
+
+영속성컨텍스트에 찾는 이미 엔티티가 있으면 getReference해도 엔티티로 가져옴
+
+```
+Member m1 = em.find(Member.class, member1.getId());
+System.out.println("m1 = " + m1.getClass());
+
+Member reference = em.getReference(Member.class, member1.getId());
+System.out.println("reference = " + reference.getClass());
+
+// JPA는 영속성 컨텍스트에 있고, PK가 같은 경우 == 비교하면 true를 보장해준다.
+System.out.println("a == a:"+ (m1 == reference));
+```
+
+```
+// JPA는 영속성 컨텍스트에 있고, PK가 같은 경우 == 비교하면 true를 보장해준다.
+System.out.println("a == a:"+ (m1 == reference));
+```
+
+심지어 반대로 하면 ....프록시 가져옴
+
+```
+Member reference = em.getReference(Member.class, member1.getId());
+System.out.println("reference = " + reference.getClass());
+
+Member m1 = em.find(Member.class, member1.getId());
+System.out.println("m1 = " + m1.getClass());
+
+// JPA는 영속성 컨텍스트에 있고, PK가 같은 경우 == 비교하면 true를 보장해준다.
+System.out.println("a == a:"+ (m1 == reference));
+```
+
+---
+
+실무시 반드시 만나는 예외가 있다...
+
+could not initialize proxy
+
+준영속상태에서 프록시 접근시 발생.
+
+---
+
+### 실무에서는 즉시로딩 쓰면 안돼!  
+### @ManyToOne, @OneToOne은 기본이 즉시로딩 -> LAZY로 설정하기
+```
+@ManyToOne(fetch = FetchType.LAZY)
+```
+## 영속성 전이 : CASCADE
+
+영속성 전이는 엔티티를 영속화할 때 연관된 엔티티도 함께 영속화하는 편리함을 제공해준다
+
+(ex.부모 엔티티 저장시에 자식 엔티티도 함께 저장)
+
+```
+
+@OneToMany(mappedBy = "parent", cascade = CascadeType.ALL)
+private List<Child> childList = new ArrayList<>();
+```
+
+cascade 속성을 사용할 수 있는 경우:
+
+하나의 부모가 자식들을 관리할때,
+
+ex)parent 말고 member가 child를 알게되면 쓰면 안된다.... 단일 엔티티에 완전히 종속적일때(소유자가 하나일때), life cycle 동일할때(등록,삭제)
+
+ex 게시판-첨부파일 경로(다른 엔티티랑 관련 있으면 쓰면 안됨. 소유자가 하나일때만 사용)
+
+### 고아객체제거 : 부모 엔티티와 연관관계가 끊어진 자식 엔티티를 자동으로 삭제
+
+`orphanRemoval = true`
+
+```
+Parent parent1 = em.find(Parent.class, id); 
+parent1.getChildren().remove(0);
+//자식 엔티티를 컬렉션에서 제거
+```
+
+고아 객체제거도 참조하는 곳이 하나일 때 사용해야함. (특정 엔티티가 개인 소유하는 경우)
+
+@OneToOne, @OneToMany만 가능
+
+\* 부모 엔티티 삭제 시
+``CascadeType.REMOVE``와 ``orphanRemoval = true``는 부모 엔티티를 삭제하면 자식 엔티티도 삭제한다.
+- 부모 엔티티에서 자식 엔티티를 제거하면 
+``CascadeType.REMOVE``는 자식 엔티티가 그대로 남아 있다.
+``orphanRemoval = true``는 자식 엔티티를 제거한다.
+
+두 경우 모두 자식 엔티티에 딱 하나의 부모 엔티티가 연관되어 있는 경우에만 사용해야한다.
+
+## 영속성 전이 + 고아 객체
+
+두 옵션을 모두 활성화하면 부모 엔티티를 통해서 자식의 생명주기를 관리할 수 있다.
+
+도메인 주도 설계(DDD)의 Aggregate Root개념을 구현할 때 유용
