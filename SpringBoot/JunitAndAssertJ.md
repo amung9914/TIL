@@ -175,6 +175,17 @@ public void findArticle() throws Exception {
 
 JSON값을 보내는 update기능의 경우 테스트 하는 법
 
+     @Autowired protected MockMvc mockMvc;
+
+    //직렬화 역직렬화를 위한 클래스, 자바객체 <->JSON 데이터
+    @Autowired protected ObjectMapper objectMapper;
+
+    //스프링컨테이너의 한 형태. applicationContext에 웹 환경에 필요한 기능을 추가한 것.
+    @Autowired private WebApplicationContext context;
+
+    @Autowired
+    BlogRepository blogRepository;
+
 ```
 ResultActions result = mockMvc.perform(put(url, savedArticle.getId())
         // JSON 데이터를 보내요
