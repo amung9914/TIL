@@ -1,5 +1,21 @@
 ### 자바에서 리스트를 만드는 방식은 대표적으로 3가지 정도 존재한다.
 
+```java
+public static void main(String[] args) {
+    // 생성자 방식
+    List<Number> arrayList = new ArrayList<>();
+    arrayList.add(1);
+    arrayList.add(2);
+    arrayList.add(3);
+
+    // Arrays 클래스의 asList 메서드
+    List<Number> asList = Arrays.asList(1, 2, 3);
+
+    // List 인터페이스의 of 메서드 (jdk 9)
+    List<Number> listOf = List.of(1, 2, 3);
+}
+```
+
 하나는 생성자로 직접 리스트 객체를 인스턴화 시키는 것이고, 
 
 좀 더 간편하게 원소가 들은 리스트를 한방에 생성하기 위해 별도로 Arrays.asList() 와 List.of() 메서드를 지원한다.
