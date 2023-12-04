@@ -171,6 +171,21 @@ public void findArticle() throws Exception {
             .andExpect(jsonPath("$.title").value(title));
 }
 ```
+---
+
+JSON값을 보내는 update기능의 경우 테스트 하는 법
+
+```
+ResultActions result = mockMvc.perform(put(url, savedArticle.getId())
+        // JSON 데이터를 보내요
+        .contentType(MediaType.APPLICATION_JSON_VALUE)
+        .content(objectMapper.writeValueAsString(request)));
+
+// then
+result.andExpect(status().isOk());
+```
+
+
 
 [https://github.com/shinsunyoung/springboot-developer/blob/main/chapter4/src/test/java/me/shinsunyoung/springbootdeveloper/TestControllerTest.java](https://github.com/shinsunyoung/springboot-developer/blob/main/chapter4/src/test/java/me/shinsunyoung/springbootdeveloper/TestControllerTest.java)
 
