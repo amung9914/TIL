@@ -7,11 +7,11 @@
    -> JVM이 GC를 실행시켜 사용하지 않는 객체를 자동으로 제거한다.
 
 ## Garbage Collector(GC)
-프로그램이 동적으로 할당했던 메모리 영역중에 필요없게된 메모리 영역을 해제하는 기능이다.=
+프로그램이 동적으로 할당했던 메모리 영역중에 필요없게된 메모리 영역을 해제하는 기능이다.
 
 기본적으로 JVM위에 올라가기 때문에 런타임에 동작하고, 힙메모리를 다룬다.
 
-### GC의 대상이 되는 경우
+### GC의 대상이 되는 경우.
 1. 객체가 NULL인 경우
 2. 블럭 실행 종료 후 블럭 내에서 생성된 객체
 3. 부모 객체가 NULL인 경우 포함하는 자식 객체
@@ -27,3 +27,17 @@
 3. Compacting
 
 ## Generational Garbage Collection
+JVM은 young generation영역과 old generation영역으로 나누어서 메모리를 관리한다
+((각각의 객체를 할당된 시간에 따라 구분함)
+Young영역은 새롭게 생성된 객체를 저장하는 공간
+Young영역이 꽉 차면 이 메모리에서 살아남은 객체를 Old영역으로 옮긴다.
+
+   ### Young영역
+Young영역 내에는 1개의 Eden영역, 2개의 Survivor영역으로 나뉨
+
+최초 객체 생성시 Eden 영역에 저장. Eden영역이 꽉 차면 Survivor영역으로 이동.
+(하나가 다 차면 교환하는 방식으로 사용됨)
+
+Survivor영역이 꽉 차면 Old영역으로 이동
+
+Java11에서는 Epsilon방식을 사용하여 Java Heap영역을 모두 소진하게되면 JVM이 shutdown됨.
